@@ -17,7 +17,7 @@ const kreta = new Kreta({
 
 
 /*new KretaAuthentication({ username: '', password: '', institute_code: '' }).getAccessToken().then((r) => {
-  console.log(r.token)
+  console.log(JSON.stringify(r, null, 2))
 })*/
 /*new KretaAuthentication({ username: '', password: '', institute_code: '' }).getRefreshToken({
   institute_code: '', username: '', refresh_token: '', refreshUserData: false
