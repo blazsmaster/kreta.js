@@ -1,9 +1,9 @@
 {
 	"name": "kreta.js",
-	"version": "1.0.2",
+	"version": "1.0.3",
 	"description": "kreta.js is a powerful and easy-to-use node.js module that wraps the Mobile API v3 of e-kréta.",
 	"main": "dist/index.js",
-	"types": "dist/types.js",
+	"types": "dist",
 	"files": [
 		"dist"
 	],
