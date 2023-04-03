@@ -4,7 +4,7 @@ import {
 	RequestRefreshTokenOptions,
 	NonceHashOptions,
 	BaseAPIUrls,
-	Endpoints
+	Endpoints, AccessToken, PreBuiltAuthenticationToken
 } from '../types';
 import axios, { AxiosResponse } from 'axios';
 import { createHmac } from 'node:crypto';
@@ -66,26 +66,26 @@ export class Authentication {
 		});
 	}
 
-	private async returnAccessToken(): Promise<string | null> {
+	private async returnTokens(): Promise<AccessToken> {
 		return await this.authenticate({
 			username: this.username,
 			password: this.password,
 			institute_code: this.institute_code
-		}).then((r: AuthenticationModel) => {
-			return r.access_token;
-		}).catch((): null => {
-			return null;
+		}).then((r: AuthenticationModel): AccessToken => {
+			return { access_token: r.access_token, refresh_token: r.refresh_token, token_type: r.token_type };
+		}).catch((): { access_token: null; refresh_token: null; token_type: null } => {
+			return { access_token: null, refresh_token: null, token_type: null };
 		});
 	}
 
-	public getAccessToken(): Promise<{ token: string }> {
+	public getAccessToken(): Promise<PreBuiltAuthenticationToken> {
 		return new Promise(async (resolve, reject): Promise<void> => {
-			const access_token: string | null = await this.returnAccessToken();
+			const { access_token, refresh_token }: AccessToken = await this.returnTokens();
 
-			if (access_token === null)
+			if (access_token === null || refresh_token === null)
 				return reject(new Error('Failed to get access token'));
 			else
-				return resolve({ token: 'Bearer' + ' ' + access_token });
+				return resolve({ token: 'Bearer' + ' ' + access_token, access_token, refresh_token });
 		});
 	}
 
