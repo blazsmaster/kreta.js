@@ -1,7 +1,7 @@
 <div align="center">
-  <br />
-  <img src="https://i.imgur.com/Zz8viJd.png" alt="kreta.js" title="kreta.js" />
-  <br />
+  <p>
+    <img src="https://i.imgur.com/Zz8viJd.png" alt="kreta.js" title="kreta.js" />
+  </p>
   <p>
     <img alt="kreta.js npm version" src="https://img.shields.io/npm/v/kreta.js?style=for-the-badge&logo=npm&logoColor=fff&color=C12419" />
     <img alt="GitHub code size in bytes" src="https://img.shields.io/github/languages/code-size/blazsmaster/kreta.js?style=for-the-badge" />
