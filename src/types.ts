@@ -101,6 +101,12 @@ export interface RequestRefreshTokenOptions {
 	username: string;
 }
 
+export interface AccessToken {
+	access_token: string | null;
+	refresh_token: string | null;
+	token_type: string | null;
+}
+
 export type ApiVersion = 'v3'
 
 export interface KretaOptions extends AuthenticationFields {
@@ -118,6 +124,8 @@ export interface Authentication {
 
 export interface PreBuiltAuthenticationToken {
 	token: string;
+	access_token: string;
+	refresh_token: string;
 }
 
 interface SystemModule {
