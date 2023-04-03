@@ -4,6 +4,7 @@
 		"module": "commonjs",
 		"rootDir": "src",
 		"declaration": true,
+		"declarationMap": true,
 		"sourceMap": true,
 		"outDir": "dist",
 		"removeComments": true,
@@ -14,7 +15,7 @@
 		"skipLibCheck": true
 	},
 	"include": [
-		"src/**/*.ts"
+		"src"
 	],
 	"exclude": [
 		"node_modules",
