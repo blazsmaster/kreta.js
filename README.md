@@ -108,6 +108,9 @@ kreta.Administration.getMessages()
 kreta.Administration.getTeachers()
 kreta.Administration.getTmgiCaseTypes()
 kreta.Administration.getUnreadMessagesCount()
+
+// GLOBAL - Unauthorized access
+kreta.Global.getInstituteList()
 ```
 
 ## Example
@@ -116,14 +119,13 @@ kreta.Administration.getUnreadMessagesCount()
 const { Kreta } = require('kreta.js');
 
 // ES6
-// import { KretaREST } from 'kreta.js';
+// import { Kreta } from 'kreta.js';
 
 // login with credentials
 const kreta = new Kreta({
   username: 'KRETA_USERNAME',
   password: 'KRETA_PASSWORD',
-  institute_code: 'INSTITUTE_CODE',
-  version: 'v3'
+  institute_code: 'INSTITUTE_CODE'
 })
 
 // get student data
