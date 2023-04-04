@@ -22,27 +22,28 @@ import {
 import { Authentication } from './Authentication';
 import dynamicValue from '../utils/dynamicValue';
 import Administration from './Administration';
+import Global from './Global';
 
 export default class Kreta {
 	private readonly username: string;
 	private readonly password: string;
 	private readonly institute_code: string;
-	private readonly version: ApiVersion;
 	private authenticate: Authentication;
 	public Administration: Administration;
+	public Global: Global;
 
 	constructor(options: KretaOptions) {
 		this.username = options.username;
 		this.password = options.password;
 		this.institute_code = options.institute_code;
-		this.version = options.version;
+		this.Global = new Global();
 		this.authenticate = new Authentication({ username: this.username, password: this.password, institute_code: this.institute_code });
 		this.Administration = new Administration({ username: this.username, password: this.password, institute_code: this.institute_code });
 	}
 
 	private buildEllenorzoApiURL(endpointWithSlash: Endpoints, params?: { [key: string]: any }): string {
 		const urlParams: string = params ? '?' + new URLSearchParams(params).toString() : '';
-		return dynamicValue(BaseAPIUrls.INSTITUTE, { institute_code: this.institute_code }).toString() + '/ellenorzo/' + this.version.toUpperCase() + endpointWithSlash + urlParams;
+		return dynamicValue(BaseAPIUrls.INSTITUTE, { institute_code: this.institute_code }).toString() + '/ellenorzo/V3' + endpointWithSlash + urlParams;
 	}
 
 	public getInstituteList(api_key: string): Promise<Institute[]> {
