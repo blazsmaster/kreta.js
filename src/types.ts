@@ -2,6 +2,8 @@ export enum Endpoints {
 	Token = '/connect/token',
 	Nonce = '/nonce',
 
+	PublikusIntezmenyek = '/intezmenyek/kreta/publikus',
+
 	Feljegyzesek = '/Sajat/Feljegyzesek',
 	FaliujsagElemek = '/Sajat/FaliujsagElemek',
 	Tanulo = '/Sajat/TanuloAdatlap',
@@ -46,7 +48,8 @@ export enum AdministrationEndpoints {
 export enum BaseAPIUrls {
 	INSTITUTE = 'https://{{institute_code}}.e-kreta.hu',
 	IDP = 'https://idp.e-kreta.hu',
-	ADMINISTRATION = 'https://eugyintezes.e-kreta.hu'
+	ADMINISTRATION = 'https://eugyintezes.e-kreta.hu',
+	GLOBAL = 'https://kretaglobalapi.e-kreta.hu'
 }
 
 export interface RequestDateRangeOptions {
@@ -110,7 +113,6 @@ export interface AccessToken {
 export type ApiVersion = 'v3'
 
 export interface KretaOptions extends AuthenticationFields {
-	version: ApiVersion;
 }
 
 export interface Authentication {
@@ -215,6 +217,24 @@ export interface Institute {
 	instituteId: number;
 	name: string;
 	url: string;
+}
+
+export interface InstituteGlobal {
+	aktivTanevGuid: string;
+	aktivTanevId: number;
+	aktivTanevNev: string;
+	azonosito: string;
+	fenntartoAzonosito: string;
+	fenntartoNev: string;
+	id: string;
+	kornyezetId: number;
+	kornyezetNev: string;
+	kornyezetTeljesNev: string;
+	kretaLink: string;
+	nev: string;
+	omKod: string;
+	rovidNev: string;
+	telepules: string;
 }
 
 export interface Evaluation {
