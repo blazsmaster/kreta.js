@@ -27,8 +27,8 @@ kreta.js is a powerful and easy-to-use node.js module that wraps the Mobile API 
 
 ### Cons
 
-- The api is not 100% known, some endpoints are maybe missing
-- Bad error handling *(check [todo](#todo))*
+- The api is not 100% covered and discovered, some endpoints are maybe missing
+- ~~Bad error handling *(check [todo](#todo))*~~
 
 ## Installation
 
@@ -53,8 +53,9 @@ $ pnpm install kreta.js
 
 ## Methods
 
-You can use the `KretaAuthentication` class to get the access and refresh tokens if you want to use the authentication methods for your own
-purposes. The `Kreta` class is the main class of the module, it contains all the methods that you can use to get data from the api.
+Use the `Global` class to get data from the api without authentication, but if you want to use the protected methods, you have
+to create a new instance of `Kreta`, then login with your credentials. **Never share or upload your credentials!** With
+the `KretaAuthentication` class you can get the access and refresh tokens, then you can use it for your own purposes.
 
 ```javascript
 const { Kreta, KretaAuthentication } = require('kreta.js');
@@ -64,53 +65,53 @@ const kreta = new Kreta({})
 const auth = new KretaAuthentication({})
 
 // AUTHENTICATION
-auth.getAccessToken()
-auth.getRefreshToken()
-
-// KRETA
-kreta.getAnnouncedTests()
-kreta.getClassAverage()
-kreta.getClassMasters()
-kreta.getDeviceGivenState()
-kreta.getEvaluations()
-kreta.getGroups()
-kreta.getHomework()
-kreta.getHomeworks()
-kreta.getInstitute()
-kreta.getInstituteList()
-kreta.getLepEvents()
-kreta.getLesson()
-kreta.getLessons()
-kreta.getNotes()
-kreta.getNoticeBoardItems()
-kreta.getOmissions()
-kreta.getSchoolYearCalendar()
-kreta.getStudent()
-kreta.getSubjectAverages()
-kreta.getTimeTableWeeks()
-
-// ADMINISTRATION
-kreta.Administration.getAccessControlSystemEvents()
-kreta.Administration.getAddressableClasses()
-kreta.Administration.getAddressableGuardiansForClass()
-kreta.Administration.getAddressableSzmkRepesentative()
-kreta.Administration.getAddressableType()
-kreta.Administration.getAddresseeType()
-kreta.Administration.getAdministrators()
-kreta.Administration.getCaseTypes()
-kreta.Administration.getClassMasters()
-kreta.Administration.getCurrentInstitutionDetails()
-kreta.Administration.getCurrentInstitutionModules()
-kreta.Administration.getDirectors()
-kreta.Administration.getMessage()
-kreta.Administration.getMessageLimitations()
-kreta.Administration.getMessages()
-kreta.Administration.getTeachers()
-kreta.Administration.getTmgiCaseTypes()
-kreta.Administration.getUnreadMessagesCount()
+auth.getAccessToken() // Get access token
+auth.getRefreshToken() // Refresh access token
 
 // GLOBAL - Unauthorized access
-kreta.Global.getInstituteList()
+kreta.Global.getInstituteList() // Get institute list
+
+// KRETA - Authentication required
+kreta.getAnnouncedTests() // Get announced tests by date range or by uids
+kreta.getClassAverage() // Get class averages
+kreta.getClassMasters() // Get class masters by uids
+kreta.getDeviceGivenState() // Get device given state
+kreta.getEvaluations() // Get evaluations by date range
+kreta.getGroups() // Get groups
+kreta.getHomework() // Get homework by uid
+kreta.getHomeworks() // Get homeworks by date range
+kreta.getInstitute() // Get current institute
+kreta.getInstituteList() // Get institute list
+kreta.getLepEvents() // Get Lázár Ervin Program events
+kreta.getLesson() // Get lesson by uid
+kreta.getLessons() // Get lessons by date range
+kreta.getNotes() // Get notes by date range
+kreta.getNoticeBoardItems() // Get notice board items
+kreta.getOmissions() // Get omissions by date range
+kreta.getSchoolYearCalendar() // Get school year calendar
+kreta.getStudent() // Get student info
+kreta.getSubjectAverages() // Get personal subject averages
+kreta.getTimeTableWeeks() // Get timetable weeks by date range
+
+// ADMINISTRATION - Authentication required
+kreta.Administration.getAccessControlSystemEvents() // Get access control system events
+kreta.Administration.getAddressableClasses() // Get addressable classes
+kreta.Administration.getAddressableGuardiansForClass() // Get addressable guardians for class by uid
+kreta.Administration.getAddressableSzmkRepesentative() // Get addressable szmk representative
+kreta.Administration.getAddressableType() // Get addressable type
+kreta.Administration.getAddresseeType() // Get addressee type
+kreta.Administration.getAdministrators() // Get institute administrators
+kreta.Administration.getCaseTypes() // Get case types
+kreta.Administration.getClassMasters() // Get class masters
+kreta.Administration.getCurrentInstitutionDetails() // Get current institute details
+kreta.Administration.getCurrentInstitutionModules() // Get current institute modules
+kreta.Administration.getDirectors() // Get institute directors
+kreta.Administration.getMessage() // Get message by uid
+kreta.Administration.getMessageLimitations() // Get message limitation settings
+kreta.Administration.getMessages() // Get messages
+kreta.Administration.getTeachers() // Get institute teachers
+kreta.Administration.getTmgiCaseTypes() // Get tmgi case types
+kreta.Administration.getUnreadMessagesCount() // Get unread messages count
 ```
 
 ## Example
@@ -153,7 +154,7 @@ kreta.Administration.getMessages()
         - How to fix, handle and prevent them
         - Which methods can throw them
         - Which error codes and messages can be thrown
-- [ ] Better error handling
+- [x] Better error handling
     - Static KretaError response
         - `KretaError: [ERROR_HERE]`
         - Custom error messages and codes
