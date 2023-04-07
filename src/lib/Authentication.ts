@@ -1,13 +1,17 @@
 import {
 	AuthenticationFields,
-	Authentication as AuthenticationModel,
+	AuthenticationResponse,
 	RequestRefreshTokenOptions,
 	NonceHashOptions,
-	BaseAPIUrls,
+	API,
 	Endpoints, AccessToken, PreBuiltAuthenticationToken
 } from '../types';
-import axios, { AxiosResponse } from 'axios';
+import axios, { AxiosProxyConfig, AxiosResponse } from 'axios';
 import { createHmac } from 'node:crypto';
+import KretaError from './errors/KretaError';
+import requireParam from '../decorators/requireParam';
+import tryRequest from '../utils/tryRequest';
+import requireCredentials from '../decorators/requireCredentials';
 
 export class Authentication {
 	private readonly username: string;
@@ -23,8 +27,34 @@ export class Authentication {
 		this.institute_code = options.institute_code;
 	}
 
-	private authenticate(options: AuthenticationFields): Promise<AuthenticationModel> {
-		return new Promise(async (resolve, reject): Promise<void> => {
+	public get _username() {
+		return this.username;
+	}
+
+	public get _password() {
+		return this.password;
+	}
+
+	public get _institute_code() {
+		return this.institute_code;
+	}
+
+	@requireParam('proxy.host')
+	@requireParam('proxy.port')
+	public setProxy(proxy: AxiosProxyConfig): this {
+		axios.defaults.proxy = proxy;
+		return this;
+	}
+
+	@requireParam('ua')
+	public setUserAgent(ua: string): this {
+		axios.defaults.headers.common['User-Agent'] = ua;
+		return this;
+	};
+
+	@requireCredentials
+	private authenticate(options: AuthenticationFields): Promise<AuthenticationResponse> {
+		return new Promise(async (resolve): Promise<void> => {
 			const nonce_key: string = await this.getNonce();
 			const hash: string = await this.getNonceHash({
 				nonce: nonce_key,
@@ -32,7 +62,7 @@ export class Authentication {
 				username: options.username
 			});
 
-			await axios.post(BaseAPIUrls.IDP + Endpoints.Token, {
+			await tryRequest(axios.post(API.IDP + Endpoints.Token, {
 				institute_code: options.institute_code,
 				username: options.username,
 				password: options.password,
@@ -45,15 +75,13 @@ export class Authentication {
 					'X-Authorizationpolicy-Key': hash,
 					'X-Authorizationpolicy-Version': this.auth_policy_version,
 				}
-			}).then((r: AxiosResponse<AuthenticationModel>) => resolve(r.data)).catch((e: Error) => reject(e));
+			}).then((r: AxiosResponse<AuthenticationResponse>) => resolve(r.data)));
 		});
 	}
 
 	private getNonce(): Promise<string> {
-		return new Promise((resolve, reject): void => {
-			axios.get(BaseAPIUrls.IDP + Endpoints.Nonce).then((r: AxiosResponse<string>) => {
-				return resolve(r.data.toString());
-			}).catch((e: Error) => reject(e));
+		return new Promise(async (resolve): Promise<void> => {
+			await tryRequest(axios.get(API.IDP + Endpoints.Nonce).then((r: AxiosResponse<string>) => resolve(r.data.toString())));
 		});
 	}
 
@@ -61,7 +89,6 @@ export class Authentication {
 		return new Promise((resolve): void => {
 			const buffer_bytes: Buffer = Buffer.from(options.institute_code.toUpperCase() + options.nonce + options.username.toUpperCase(), 'utf8');
 			const hash: Buffer = createHmac('sha512', Buffer.from([98, 97, 83, 115, 120, 79, 119, 108, 85, 49, 106, 77])).update(buffer_bytes).digest();
-
 			return resolve(hash.toString('base64'));
 		});
 	}
@@ -71,7 +98,7 @@ export class Authentication {
 			username: this.username,
 			password: this.password,
 			institute_code: this.institute_code
-		}).then((r: AuthenticationModel): AccessToken => {
+		}).then((r: AuthenticationResponse): AccessToken => {
 			return { access_token: r.access_token, refresh_token: r.refresh_token, token_type: r.token_type };
 		}).catch((): { access_token: null; refresh_token: null; token_type: null } => {
 			return { access_token: null, refresh_token: null, token_type: null };
@@ -81,26 +108,27 @@ export class Authentication {
 	public getAccessToken(): Promise<PreBuiltAuthenticationToken> {
 		return new Promise(async (resolve, reject): Promise<void> => {
 			const { access_token, refresh_token }: AccessToken = await this.returnTokens();
-
 			if (access_token === null || refresh_token === null)
-				return reject(new Error('Failed to get access token'));
+				return reject(new KretaError('Failed to get access token: Invalid credentials'));
 			else
 				return resolve({ token: 'Bearer' + ' ' + access_token, access_token, refresh_token });
 		});
 	}
 
-	public getRefreshToken(options: RequestRefreshTokenOptions): Promise<AuthenticationModel> {
-		return new Promise(async (resolve, reject): Promise<void> => {
+	@requireParam('options.refreshToken')
+	@requireParam('options.refreshUserData')
+	public getRefreshToken(options: RequestRefreshTokenOptions): Promise<AuthenticationResponse> {
+		return new Promise(async (resolve): Promise<void> => {
 			const nonce_key: string = await this.getNonce();
 			const hash: string = await this.getNonceHash({
 				nonce: nonce_key,
-				institute_code: options.institute_code,
-				username: options.username
+				institute_code: this.institute_code,
+				username: this.username
 			});
 
-			await axios.post(BaseAPIUrls.IDP + Endpoints.Token, {
-				refresh_token: options.refresh_token,
-				institute_code: options.institute_code,
+			await tryRequest(axios.post(API.IDP + Endpoints.Token, {
+				refresh_token: options.refreshToken,
+				institute_code: this.institute_code,
 				grant_type: 'refresh_token',
 				client_id: this.client_id,
 				refresh_user_data: options.refreshUserData
@@ -110,7 +138,9 @@ export class Authentication {
 					'X-Authorizationpolicy-Key': hash,
 					'X-Authorizationpolicy-Version': this.auth_policy_version,
 				}
-			}).then((r: AxiosResponse<AuthenticationModel>) => resolve(r.data)).catch((e: Error) => reject(e));
+			}).then((r: AxiosResponse<AuthenticationResponse>) =>
+				resolve(r.data)
+			));
 		});
 	}
 }

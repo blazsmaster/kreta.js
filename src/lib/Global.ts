@@ -1,17 +1,18 @@
 import axios, { AxiosResponse } from 'axios';
-import { BaseAPIUrls, Endpoints, InstituteGlobal } from '../types';
+import { API, Endpoints, InstituteGlobal } from '../types';
+import tryRequest from '../utils/tryRequest';
 
 export default class Global {
 	constructor() {
 	}
 
 	public getInstituteList(): Promise<InstituteGlobal[]> {
-		return new Promise(async (resolve, reject): Promise<void> => {
-			await axios.get(BaseAPIUrls.GLOBAL + Endpoints.PublikusIntezmenyek, {
+		return new Promise(async (resolve): Promise<void> => {
+			await tryRequest(axios.get(API.GLOBAL + Endpoints.PublikusIntezmenyek, {
 				headers: {
 					'api-version': 'v1'
 				}
-			}).then((r: AxiosResponse<InstituteGlobal[]>) => resolve(r.data)).catch((e: Error) => reject(e));
+			}).then((r: AxiosResponse<InstituteGlobal[]>) => resolve(r.data)));
 		});
 	}
 }
