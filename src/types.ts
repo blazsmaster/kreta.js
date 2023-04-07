@@ -45,7 +45,7 @@ export enum AdministrationEndpoints {
 	JelenlegiIntezmeny = '/ugy/aktualisIntezmenyAdatok'
 }
 
-export enum BaseAPIUrls {
+export enum API {
 	INSTITUTE = 'https://{{institute_code}}.e-kreta.hu',
 	IDP = 'https://idp.e-kreta.hu',
 	ADMINISTRATION = 'https://eugyintezes.e-kreta.hu',
@@ -62,11 +62,8 @@ export interface RequestDateRangeRequiredOptions {
 	dateTo: string;
 }
 
-export interface RequestSubjectAveragesOptions {
+export interface RequestClassAveragesOptions {
 	oktatasiNevelesiFeladatUid?: string;
-}
-
-export interface RequestClassAveragesOptions extends RequestSubjectAveragesOptions {
 	subjectUid?: string;
 }
 
@@ -75,7 +72,7 @@ export interface RequestHomeWorkOptions extends RequestDateRangeOptions {
 }
 
 export interface RequestAnnouncedTestsOptions extends RequestDateRangeOptions {
-	uids?: string[];
+	uids?: string[] | number[];
 }
 
 export interface ConfigurationDescriptor {
@@ -98,10 +95,8 @@ export interface AuthenticationFields {
 }
 
 export interface RequestRefreshTokenOptions {
-	institute_code: string;
 	refreshUserData: boolean;
-	refresh_token: string;
-	username: string;
+	refreshToken: string;
 }
 
 export interface AccessToken {
@@ -110,12 +105,10 @@ export interface AccessToken {
 	token_type: string | null;
 }
 
-export type ApiVersion = 'v3'
-
 export interface KretaOptions extends AuthenticationFields {
 }
 
-export interface Authentication {
+export interface AuthenticationResponse {
 	access_token: string;
 	expires_in: number;
 	id_token: string | null;
@@ -129,6 +122,22 @@ export interface PreBuiltAuthenticationToken {
 	access_token: string;
 	refresh_token: string;
 }
+
+interface ResponseErrorItem {
+	PropertyName: string;
+	Message: string;
+	ExceptionType: string;
+}
+
+export interface ResponseError {
+	ExceptionId: string;
+	ExceptionType: string;
+	Message: string;
+	ErrorList: ResponseErrorItem[] | null;
+	error?: string;
+}
+
+export type RequestResponseError = ResponseError | string | undefined;
 
 interface SystemModule {
 	IsAktiv: boolean;
