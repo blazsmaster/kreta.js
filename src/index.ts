@@ -1,5 +1,4 @@
-import Kreta from './lib/Kreta';
-import { Authentication as KretaAuthentication } from './lib/Authentication';
-
+export { GlobalApiV1 } from './lib/GlobalApiV1';
+export { IdpApiV1 } from './lib/IdpApiV1';
+export { MobileApiV3 } from './lib/MobileApiV3';
 export * from './types';
-export { Kreta, KretaAuthentication };

@@ -129,3 +129,9 @@ dist
 # Editor directories and files
 .idea
 .vscode
+
+# Test files
+test/
+
+# Local backup files
+backup/
