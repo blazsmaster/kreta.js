@@ -1,46 +1,46 @@
 {
-	"name": "kreta.js",
-	"version": "1.0.6",
-	"description": "kreta.js is a powerful and easy-to-use node.js module that wraps the Mobile API v3 of e-kréta.",
-	"main": "dist/index.js",
-	"types": "dist",
-	"files": [
-		"dist"
-	],
-	"scripts": {
-		"build": "tsc --project tsconfig.json",
-		"run": "node dist/index.js",
-		"test": "node test/index.test.js"
-	},
-	"repository": {
-		"type": "git",
-		"url": "https://github.com/blazsmaster/kreta.js.git"
-	},
-	"bugs": {
-		"url": "https://github.com/blazsmaster/kreta.js/issues"
-	},
-	"author": "blazsmaster <64538277+blazsmaster@users.noreply.github.com>",
-	"license": "MIT",
-	"keywords": [
-		"wrapper",
-		"rest-api",
-		"api-wrapper",
-		"kreta",
-		"ekreta",
-		"e-kreta",
-		"ekreta-api",
-		"kreta-api"
-	],
-	"engines": {
-		"node": ">=14.21.3"
-	},
-	"packageManager": "yarn@1.22.19",
-	"dependencies": {
-		"axios": "^1.3.4",
-		"moment": "^2.29.4"
-	},
-	"devDependencies": {
-		"@types/node": "^18.15.11",
-		"typescript": "^5.0.3"
-	}
+  "name": "kreta.js",
+  "version": "1.0.6",
+  "description": "kreta.js is a powerful and easy-to-use node.js module that wraps the Mobile API v3 of e-kréta.",
+  "main": "dist/index.js",
+  "types": "dist",
+  "files": [
+    "dist"
+  ],
+  "scripts": {
+    "build": "tsc --project tsconfig.json",
+    "run": "node dist/index.js",
+    "test": "node test/index.test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/blazsmaster/kreta.js.git"
+  },
+  "bugs": {
+    "url": "https://github.com/blazsmaster/kreta.js/issues"
+  },
+  "author": "blazsmaster <64538277+blazsmaster@users.noreply.github.com>",
+  "license": "MIT",
+  "keywords": [
+    "wrapper",
+    "rest-api",
+    "api-wrapper",
+    "kreta",
+    "ekreta",
+    "e-kreta",
+    "ekreta-api",
+    "kreta-api"
+  ],
+  "engines": {
+    "node": ">=14.21.3"
+  },
+  "packageManager": "yarn@1.22.19",
+  "dependencies": {
+    "axios": "^1.6.8",
+    "class-validator": "^0.14.1"
+  },
+  "devDependencies": {
+    "@types/node": "^18.15.11",
+    "typescript": "^5.0.3"
+  }
 }
