@@ -130,8 +130,5 @@ dist
 .idea
 .vscode
 
-# Test files
-test/
-
 # Local backup files
 backup/
