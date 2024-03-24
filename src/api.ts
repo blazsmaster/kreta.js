@@ -1,40 +1,17 @@
-export enum DktEndpoints {
-	// DeleteHomeworkSolutionAttachment = '/mobil/intezmenyek/tanulok/orak/hazifeladatok/beadasok/{haziFeladatBeadasId}/fajlok/{id}',
-	// DeleteSolutionAttachment = '/mobil/intezmenyek/tanulok/orak/oraifeladatok/beadasok/{oraiFeladatBeadasId}/fajlok/{id}',
-	// GetClasswork = '/mobil/intezmenyek/tanulok/orak/oraifeladatok/{oraiFeladatId}',
-	// GetClassworkAttachmentUrl = '/mobil/intezmenyek/tanulok/orak/oraifeladatok/{oraiFeladatId}/fajlok/{id}/url',
-	// GetClassworkAttachments = '/mobil/intezmenyek/tanulok/orak/oraifeladatok/{id}/fajlok',
-	// GetClassworkGroups = '/mobil/intezmenyek/tanulok/orak/oraifeladatok/groupok/{groupId}',
-	// GetClassworkSolutionAttachmentUrl = '/mobil/intezmenyek/tanulok/orak/oraifeladatok/beadasok/{oraiFeladatBeadasId}/fajlok/{id}/url',
+enum DktEndpoints {
 	GetClassworkTeachingMaterial = 'mobil/intezmenyek/tanulok/orak/tananyagok',
-	// GetHomeworkSolutionAttachmentUrl = '/mobil/intezmenyek/tanulok/orak/hazifeladatok/beadasok/{haziFeladatBeadasId}/fajlok/{id}/url',
-	// GetHomeworkSolutionAttachments = '/mobil/intezmenyek/tanulok/orak/hazifeladatok/beadasok/{haziFeladatBeadasId}/fajlok',
-	// GetLanguageTask = '/mobil/intezmenyek/tanulok/orak/nyelvifeladatok/{groupId}',
-	// GetLanguageTaskSubmission = '/mobil/intezmenyek/tanulok/orak/nyelvifeladatok/groupok/{groupId}/beadas',
-	// GetSolutionAttachments = '/mobil/intezmenyek/tanulok/orak/oraifeladatok/beadasok/{beadasId}/fajlok',
-	// GetSubmittedClasswork = '/mobil/intezmenyek/tanulok/orak/oraifeladatok/{oraiFeladatId}/beadas',
-	// GetSubmittedHomework = '/mobil/intezmenyek/tanulok/orak/hazifeladatok/{haziFeladatId}/beadas',
-	// PutSaveSolution = '/mobil/intezmenyek/tanulok/orak/oraifeladatok/beadasok/{beadasId}',
-	// SaveHomeworkAttachment = '/mobil/intezmenyek/tanulok/orak/hazifeladatok/beadasok/{haziFeladatBeadasId}/fajlok/veglegesites',
-	// SaveHomeworkSolution = '/mobil/intezmenyek/tanulok/orak/hazifeladatok/beadasok/{haziFeladatId}',
-	// SaveSolutionAttachment = '/mobil/intezmenyek/tanulok/orak/oraifeladatok/beadasok/{oraiFeladatBeadasId}/fajlok/veglegesites',
-	// SubmitClassworkSolution = '/mobil/intezmenyek/tanulok/orak/oraifeladatok/beadasok/{beadasId}/beadas',
-	// SubmitHomeworkSolution = '/mobil/intezmenyek/tanulok/orak/hazifeladatok/beadasok/{haziFeladatId}/beadas',
 }
 
-export enum EugyintezesEndpoints {
+enum EugyintezesEndpoints {
 	CreateAttachment = 'ideiglenesfajlok',
-	// CreateRectification = '/ugy/kerelmek/{ugyId}',
 	CreateTmgiCase = 'ugy/kerelmek',
 	DeleteMessagePermanently = 'kommunikacio/postaladaelemek/torles',
 	GetAccessControlSystemEvents = 'belepteto/kartyaesemenyek/sajat',
 	GetAddressableClasses = 'kommunikacio/osztalyok/cimezheto',
-	// GetAddressableGuardiansForClass = '/kreta/gondviselok/osztaly/{osztalyKretaAzonosito}',
 	GetAddressableSzmkRepesentative = 'kommunikacio/szmkkepviselok/cimezheto',
 	GetAddressableType = 'kommunikacio/cimezhetotipusok',
 	GetAddresseeType = 'adatszotarak/cimzetttipusok',
 	GetAdministrators = 'kreta/alkalmazottak/adminisztrator',
-	// GetCase = '/ugy/kerelmek/{ugyId}',
 	GetCaseTypes = 'adatszotarak/kerelemtipusok',
 	GetCases = 'ugy/kerelmek',
 	GetChildData = 'kreta/gyerekemadatok',
@@ -42,10 +19,8 @@ export enum EugyintezesEndpoints {
 	GetCurrentInstitutionDetails = 'ugy/aktualisIntezmenyAdatok',
 	GetCurrentInstitutionModules = 'intezmenyek/sajat/modulok',
 	GetDirectors = 'kreta/alkalmazottak/igazgatosag',
-	// GetMessage = '/kommunikacio/postaladaelemek/{azonosito}',
 	GetMessageLimitations = 'kommunikacio/uzenetek/kuldhetok/korlat',
 	GetMessages = 'kommunikacio/postaladaelemek/sajat',
-	// GetSigner = '/ugy/alkalmazott/{kerelemAzonosito}/{kretaAzonosito}',
 	GetStatus = 'status',
 	GetSzmk = 'kommunikacio/szmkkepviselok/cimezheto',
 	GetTeachers = 'kreta/alkalmazottak/tanar',
@@ -56,36 +31,37 @@ export enum EugyintezesEndpoints {
 	SendMessageToBin = 'kommunikacio/postaladaelemek/kuka',
 }
 
-export enum GlobalEndpoints {
+enum GlobalEndpoints {
+	GetConfigurationDescriptors = 'configuration/ConfigurationDescriptor.json',
 	GetInstitutes = 'intezmenyek/kreta/publikus',
 }
 
-export enum IDPEndpoints {
+enum IDPEndpoints {
 	ExtendToken = 'connect/token',
 	GetNonce = 'nonce',
 	Login = 'connect/token',
 	RevokeRefreshToken = 'connect/revocation',
 }
 
-export enum MobileEndpoints {
+enum MobileEndpoints {
 	DeleteBankAccountNumber = 'sajat/Bankszamla',
-	// DeleteReservation = '/sajat/Fogadoorak/Idopontok/Jelentkezesek/{uid}',
-	// DownloadAttachment = '/sajat/Csatolmany/{uid}',
 	GetAnnouncedTests = 'sajat/BejelentettSzamonkeresek',
-	// GetAnnouncedTestsByDate = 'sajat/BejelentettSzamonkeresek',
+	GetCertificateEvaluations = 'sajat/Ertekelesek/Bizonyitvany',
 	GetClassAverage = 'sajat/Ertekelesek/Atlagok/OsztalyAtlagok',
 	GetClassMaster = 'felhasznalok/Alkalmazottak/Tanarok/Osztalyfonokok',
-	// GetConsultingHour = '/sajat/Fogadoorak/{uid}',
 	GetConsultingHours = 'sajat/Fogadoorak',
+	GetDailyNotificationSummary = 'sajat/NapiErtesitesOsszefoglalo',
 	GetDeviceGivenState = 'TargyiEszkoz/IsEszkozKiosztva',
 	GetEvaluations = 'sajat/Ertekelesek',
 	GetGroups = 'sajat/OsztalyCsoportok',
 	GetGuardian4T = 'sajat/GondviseloAdatlap',
-	// GetHomework = '/sajat/HaziFeladatok/{id}',
+	GetGuardianIsLegalRepresentative = 'Gondviselo/IsTorvenyesKepviselo',
 	GetHomeworks = 'sajat/HaziFeladatok',
+	GetInstitution = 'sajat/Intezmenyek',
 	GetLEPEvents = 'Lep/Eloadasok',
 	GetLesson = 'sajat/OrarendElem',
 	GetLessons = 'sajat/OrarendElemek',
+	GetNonCertificateEvaluations = 'sajat/Ertekelesek/NemBizonyitvany',
 	GetNotes = 'sajat/Feljegyzesek',
 	GetNoticeBoardItems = 'sajat/FaliujsagElemek',
 	GetOmissions = 'sajat/Mulasztasok',
@@ -97,14 +73,41 @@ export enum MobileEndpoints {
 	GetTimeTableWeeks = 'sajat/Intezmenyek/Hetirendek/Orarendi',
 	PostBankAccountNumber = 'sajat/Bankszamla',
 	PostContact = 'sajat/Elerhetoseg',
-	PostCovidForm = 'Bejelentes/Covid',
-	// PostReservation = '/sajat/Fogadoorak/Idopontok/Jelentkezesek/{uid}',
+	PostCovidReport = 'Bejelentes/Covid',
 	PostTeszekRegistration = 'TargyiEszkoz/Regisztracio',
 	UpdateGuardian4T = 'sajat/GondviseloAdatlap',
 	UpdateLepEventPermission = 'Lep/Eloadasok/GondviseloEngedelyezes',
 }
 
-export enum NotificationEndpoints {
+enum NaploEndpoints {
+	DeleteLogging = 'Orarend/OraNaplozasTorles',
+	GetAnnouncedTests = 'OsztalyCsoport/BejelentettSzamonkeres',
+	GetClassGroups = 'OsztalyCsoport',
+	GetEvaluationMode = 'Enum/NaploEnum',
+	GetEvaluations = 'OsztalyCsoport/Tanulok/Ertekeles',
+	GetJustification = 'Igazolas',
+	GetNotes = 'Ora/Feljegyzes',
+	GetProfile = 'Tanar/Profil',
+	GetSchoolGuard = 'Iskolaor',
+	GetSentenceBankItems = 'OsztalyCsoport/Ertekeles/Mondatbank',
+	GetSettings = 'Tanar/Beallitasok',
+	GetStudentEvaluations = 'OsztalyCsoport/Ertekeles',
+	GetStudentPresence = 'Orarend/Jelenlet',
+	GetStudents = 'OsztalyCsoport/Tanulok',
+	GetSubjectDivision = 'Tanar/Tantargyfelosztas',
+	GetSyllabus = 'Tanmenet',
+	GetTimetable = 'Orarend',
+	GetTimetableElement = 'Orarend/OrarendElem',
+	GetTimetableWeeks = 'Orarend/Hetirend',
+	PostAnnouncedTest = 'Orarend/BejelentettSzamonkeres',
+	PostClassGroupEvaluations = 'OsztalyCsoport/Ertekeles',
+	PostHomework = 'HaziFeladat',
+	PostJustification = 'Igazolas',
+	PostLogging = 'Orarend/OraNaplozas',
+	PostSettings = 'Tanar/Beallitasok',
+}
+
+enum NotificationEndpoints {
 	AddPushNotificationRegistration = 'Registration',
 	DeletePushNotificationRegistration = 'Registration',
 	UpdatePushNotificationRegistration = 'Registration',
@@ -147,40 +150,62 @@ export const Endpoints = {
 	Mobile: {
 		DeleteReservation: (uid: string) => `sajat/Fogadoorak/Idopontok/Jelentkezesek/${uid}`,
 		DownloadAttachment: (uid: string) => `sajat/Csatolmany/${uid}`,
+		GetAnnouncedTest: (uid: string) => `sajat/BejelentettSzamonkeresek/${uid}`,
 		GetConsultingHour: (uid: string) => `sajat/Fogadoorak/${uid}`,
-		GetHomework: (id: string) => `sajat/HaziFeladatok/${id}`,
+		GetEvaluation: (uid: string) => `sajat/Ertekelesek/${uid}`,
+		GetHomework: (uid: string) => `sajat/HaziFeladatok/${uid}`,
+		GetNote: (uid: string) => `sajat/Feljegyzesek/${uid}`,
+		GetOmission: (uid: string) => `sajat/Mulasztasok/${uid}`,
 		PostReservation: (uid: string) => `sajat/Fogadoorak/Idopontok/Jelentkezesek/${uid}`,
 		...MobileEndpoints,
+	},
+	Naplo: {
+		DeleteAnnouncedTest: (uid: number) => `Orarend/BejelentettSzamonkeres/${uid}`,
+		DeleteEvaluation: (uid: number) => `OsztalyCsoport/Tanulok/Ertekeles/${uid}`,
+		DeleteHomework: (uid: string) => `HaziFeladat/${uid}`,
+		DeleteHomeworkAttachment: (uid: string) => `HaziFeladat/Csatolmany/${uid}`,
+		DeleteJustification: (uid: string) => `Igazolas/${uid}`,
+		GetAnnouncedTest: (uid: number) => `Orarend/BejelentettSzamonkeres/${uid}`,
+		GetHomework: (uid: string) => `HaziFeladat/${uid}`,
+		GetStudent: (uid: number) => `OsztalyCsoport/Tanulok/${uid}`,
+		PutHomework: (uid: string) => `HaziFeladat/${uid}`,
+		UpdateEvaluation: (uid: number) => `OsztalyCsoport/Tanulok/Ertekeles/${uid}`,
+		...NaploEndpoints,
 	},
 	Notification: NotificationEndpoints,
 };
 
-export enum DktApi {
+enum DktApi {
 	Host = 'https://kretadktapi.e-kreta.hu',
 	Path = '/dktapi/',
 }
 
-export enum EugyintezesApi {
+enum EugyintezesApi {
 	Host = 'https://eugyintezes.e-kreta.hu',
 	Path = '/api/v1/',
 }
 
-export enum GlobalApi {
+enum GlobalApi {
 	Host = 'https://kretaglobalapi.e-kreta.hu',
+	WinCore = 'https://kretamobile.blob.core.windows.net',
 	Path = '/',
 }
 
-export enum IDPApi {
+enum IDPApi {
 	Host = 'https://idp.e-kreta.hu',
 	Path = '/',
 }
 
-export enum MobileApi {
+enum MobileApi {
 	Path = '/ellenorzo/v3/',
 	Key = '21ff6c25-d1da-4a68-a811-c881a6057463',
 }
 
-export enum NotificationApi {
+enum NaploApi {
+	Path = '/naplo/V3/'
+}
+
+enum NotificationApi {
 	Host = 'https://kretaglobalmobileapi2.ekreta.hu',
 	Path = '/api/v3/',
 	Key = '7856d350-1fda-45f5-822d-e1a2f3f1acf0',
@@ -193,6 +218,10 @@ export const API = {
 	Mobile: {
 		Host: (institute_code: string) => `https://${institute_code}.e-kreta.hu`,
 		...MobileApi,
+	},
+	Naplo: {
+		Host: (institute_code: string) => `https://${institute_code}.e-kreta.hu`,
+		...NaploApi,
 	},
 	Notification: NotificationApi,
 };
