@@ -139,10 +139,10 @@ export const Endpoints = {
 	},
 	Eugyintezes: {
 		CreateRectification: (ugyId: string) => `ugy/kerelmek/${ugyId}`,
-		GetAddressableGuardiansForClass: (osztalyKretaAzonosito: string) => `kreta/gondviselok/osztaly/${osztalyKretaAzonosito}`,
+		GetAddressableGuardiansForClass: (osztalyKretaAzonosito: string | number) => `kreta/gondviselok/osztaly/${osztalyKretaAzonosito}`,
 		GetCase: (ugyId: string) => `ugy/kerelmek/${ugyId}`,
-		GetMessage: (azonosito: string) => `kommunikacio/postaladaelemek/${azonosito}`,
-		GetSigner: (kerelemAzonosito: string, kretaAzonosito: string) => `ugy/alkalmazott/${kerelemAzonosito}/${kretaAzonosito}`,
+		GetMessage: (azonosito: string | number) => `kommunikacio/postaladaelemek/${azonosito}`,
+		GetSigner: (kerelemAzonosito: string | number, kretaAzonosito: string | number) => `ugy/alkalmazott/${kerelemAzonosito}/${kretaAzonosito}`,
 		...EugyintezesEndpoints,
 	},
 	Global: GlobalEndpoints,
