@@ -140,17 +140,17 @@ export default class LessonDto implements Partial<LessonFields> {
 
 	constructor(input: any) {
 		if (typeof input === 'object' && input !== null) {
-			this.announcedTestUid = typeof input['BejelentettSzamonkeresUid'] === 'string' ? input['BejelentettSzamonkeresUid'] : undefined;
+			this.announcedTestUid = typeof input['BejelentettSzamonkeresUid'] === 'string' ? input['BejelentettSzamonkeresUid'].trim() : undefined;
 			this.attachments = typeof input['Csatolmanyok'] === 'object' ? input['Csatolmanyok'].map((e: any) => new AttachmentDto(e)) :
 				undefined;
 			this.classGroup = typeof input['OsztalyCsoport'] === 'object' ? new UidNameStructure(input['OsztalyCsoport']) : undefined;
 			this.classScheduleNumber = typeof input['Oraszam'] === 'number' ? input['Oraszam'] : undefined;
-			this.classroom = typeof input['TeremNeve'] === 'string' ? input['TeremNeve'] : undefined;
-			this.classworkGroupId = typeof input['FeladatGroupUid'] === 'string' ? input['FeladatGroupUid'] : undefined;
-			this.digitalInstrumentType = typeof input['DigitalisEszkozTipus'] === 'string' ? input['DigitalisEszkozTipus'] : undefined;
-			this.digitalPlatformType = typeof input['DigitalisPlatformTipus'] === 'string' ? input['DigitalisPlatformTipus'] : undefined;
+			this.classroom = typeof input['TeremNeve'] === 'string' ? input['TeremNeve'].trim() : undefined;
+			this.classworkGroupId = typeof input['FeladatGroupUid'] === 'string' ? input['FeladatGroupUid'].trim() : undefined;
+			this.digitalInstrumentType = typeof input['DigitalisEszkozTipus'] === 'string' ? input['DigitalisEszkozTipus'].trim() : undefined;
+			this.digitalPlatformType = typeof input['DigitalisPlatformTipus'] === 'string' ? input['DigitalisPlatformTipus'].trim() : undefined;
 			this.endTimeAsString = typeof input['VegIdopont'] === 'string' ? new Date(input['VegIdopont']) : undefined;
-			this.homeWorkUid = typeof input['HaziFeladatUid'] === 'string' ? input['HaziFeladatUid'] : undefined;
+			this.homeWorkUid = typeof input['HaziFeladatUid'] === 'string' ? input['HaziFeladatUid'].trim() : undefined;
 			this.homeworkEditedByStudentEnabled = typeof input['IsTanuloHaziFeladatEnabled'] === 'boolean' ? input['IsTanuloHaziFeladatEnabled'] :
 				undefined;
 			this.isDigitalLesson = typeof input['IsDigitalisOra'] === 'boolean' ? input['IsDigitalisOra'] : undefined;

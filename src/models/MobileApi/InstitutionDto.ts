@@ -25,7 +25,6 @@ export default class InstitutionDto implements Partial<InstitutionFields> {
 	private readonly uid?: string;
 
 	constructor(input: any) {
-		console.log(JSON.stringify(input));
 		if (typeof input === 'object' && input !== null) {
 			this.customizationSettings = typeof input['TestreszabasBeallitasok'] === 'object' ?
 				new CustomizationSettingsDto(input['TestreszabasBeallitasok']) : undefined;

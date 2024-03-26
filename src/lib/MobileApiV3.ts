@@ -1,6 +1,7 @@
 import axios, { AxiosError, AxiosInstance } from 'axios';
 import { API, Endpoints } from '../api';
 import qs from '../utils/qs';
+import { DateFilter, TimeTableDateFilter } from '../types';
 import AnnouncedTestDto from '../models/MobileApi/AnnouncedTestDto';
 import StudentDto from '../models/MobileApi/StudentDto';
 import ClassAverageDto from '../models/MobileApi/ClassAverageDto';
@@ -10,7 +11,7 @@ import GroupDto from '../models/MobileApi/GroupDto';
 import Guardian4TDto from '../models/MobileApi/Guardian4TDto';
 import HomeworkDto from '../models/MobileApi/HomeworkDto';
 import LessonDto from '../models/MobileApi/LessonDto';
-import KretaError from '../models/KretaError';
+import KretaExceptionError from '../models/KretaExceptionError';
 import NoteDto from '../models/MobileApi/NoteDto';
 import NoticeBoardItemDto from '../models/MobileApi/NoticeBoardItemDto';
 import OmissionDto from '../models/MobileApi/OmissionDto';
@@ -26,76 +27,87 @@ import Guardian4TPostDto, { Guardian4TPostFields } from '../models/MobileApi/Gua
 import LepEventGuardianPermissionPostDto, {
 	LepEventGuardianPermissionPostFields,
 } from '../models/MobileApi/LepEventGuardianPermissionPostDto';
+import DailyNotificationSummaryDto from '../models/MobileApi/DailyNotificationSummaryDto';
+import InstitutionDto from '../models/MobileApi/InstitutionDto';
 
 export interface MobileApiV3Fields {
-	access_token: string;
+	/**
+	 * @description A bejelentkezés után kapott hozzáférési token
+	 */
+	accessToken: string;
+	/**
+	 * @description Az intézmény egyedi azonosítója
+	 */
 	instituteCode: string;
 }
 
-export interface DateFilter {
-	datumTol?: Date | string;
-	datumIg?: Date | string;
-}
-
-export interface TimeTableDateFilter {
-	orarendElemKezdoNapDatuma: Date | string;
-	orarendElemVegNapDatuma: Date | string;
-}
-
 export class MobileApiV3 {
-	private readonly access_token: string;
-	private readonly instituteCode: string;
+	private readonly _access_token: string;
+	private readonly _instituteCode: string;
 
 	private readonly instance: AxiosInstance;
 
 	constructor(fields: MobileApiV3Fields) {
-		this.access_token = fields.access_token;
-		this.instituteCode = fields.instituteCode;
+		this._access_token = fields.accessToken;
+		this._instituteCode = fields.instituteCode;
 
 		this.instance = axios.create({
-			baseURL: API.Mobile.Host(this.instituteCode) + API.Mobile.Path,
+			baseURL: API.Mobile.Host(this._instituteCode) + API.Mobile.Path,
 			headers: {
-				Authorization: `Bearer ${this.access_token}`,
+				Authorization: `Bearer ${this._access_token}`,
 				apiKey: API.Mobile.Key,
-				'User-Agent': 'hu.ekreta.student/1.0.5/Android/0/0',
+				// 'User-Agent': 'hu.ekreta.student/1.0.5/Android/0/0',
 			},
 		});
 	}
 
+	/**
+	 * @description Tanuló bankszámlaszámának törlése
+	 */
 	public deleteBankAccountNumber(): Promise<any> {
 		return new Promise(async (resolve, reject) => {
 			try {
 				const response = await this.instance.delete(Endpoints.Mobile.DeleteBankAccountNumber);
 				resolve(response.data);
 			} catch (e) {
-				reject(e);
+				return reject(new KretaExceptionError((e as AxiosError).response?.data));
 			}
 		});
 	}
 
+	/**
+	 * @description Jelentkezett fogadóóra időpont lemondás
+	 * @param uid A fogadóóra egyedi azonosítója
+	 */
 	public deleteReservation(uid: string): Promise<any> {
 		return new Promise(async (resolve, reject) => {
 			try {
 				const response = await this.instance.delete(Endpoints.Mobile.DeleteReservation(uid));
 				resolve(response.data);
 			} catch (e) {
-				reject(e);
+				return reject(new KretaExceptionError((e as AxiosError).response?.data));
 			}
 		});
-
 	}
 
+	/**
+	 * @description Csatolmány lekérdezése
+	 * @param uid A csatolmány egyedi azonosítója
+	 */
 	public downloadAttachment(uid: string): Promise<any> {
 		return new Promise(async (resolve, reject) => {
 			try {
 				const response = await this.instance.get(Endpoints.Mobile.DownloadAttachment(uid));
 				resolve(response.data);
 			} catch (e) {
-				reject(e);
+				return reject(new KretaExceptionError((e as AxiosError).response?.data));
 			}
 		});
 	}
 
+	/**
+	 * @description Bejelentett számonkérések lekérdezése
+	 */
 	public getAnnouncedTests(df?: DateFilter): Promise<Array<AnnouncedTestDto>> {
 		return new Promise(async (resolve, reject) => {
 			try {
@@ -111,16 +123,35 @@ export class MobileApiV3 {
 
 				resolve(announcedTests);
 			} catch (e) {
-				reject(e);
+				return reject((e as AxiosError).response?.data);
 			}
 		});
 	}
 
-	public getAnnouncedTestsById(Uids: Array<string> | string): Promise<Array<AnnouncedTestDto>> {
+	/**
+	 * @description Bejelentett számonkérés lekérdezése
+	 * @param uid A bejelentett számonkérés egyedi azonosítója
+	 */
+	public getAnnouncedTest(uid: string): Promise<AnnouncedTestDto> {
+		return new Promise(async (resolve, reject) => {
+			try {
+				const response = await this.instance.get(Endpoints.Mobile.GetAnnouncedTest(uid));
+				resolve(new AnnouncedTestDto(response.data));
+			} catch (e) {
+				return reject(new KretaExceptionError((e as AxiosError).response?.data));
+			}
+		});
+	}
+
+	/**
+	 * @description Bejelentett számonkérés lekérdezése uid lista alapján
+	 * @param uids A bejelentett számonkérések egyedi azonosítói
+	 */
+	public getAnnouncedTestsByUids(uids: Array<string>): Promise<Array<AnnouncedTestDto>> {
 		return new Promise(async (resolve, reject) => {
 			try {
 				const response = await this.instance.get(Endpoints.Mobile.GetAnnouncedTests + qs({
-					Uids: Array.isArray(Uids) ? Uids.join(';') : Uids,
+					Uids: uidFilter(uids),
 				}));
 
 				const announcedTests: Array<AnnouncedTestDto> = [];
@@ -130,11 +161,16 @@ export class MobileApiV3 {
 
 				resolve(announcedTests);
 			} catch (e) {
-				reject(e);
+				return reject(new KretaExceptionError((e as AxiosError).response?.data));
 			}
 		});
 	}
 
+	/**
+	 * @description Tanuló összes tanult tantárgyának átlaga és osztályátlaga
+	 * @param oktatasiNevelesiFeladatUid Az oktatási-nevelési feladat egyedi azonosítója
+	 * @param tantargyUid A tantárgy egyedi azonosítója
+	 */
 	public getClassAverage(oktatasiNevelesiFeladatUid: string, tantargyUid?: string): Promise<Array<ClassAverageDto>> {
 		return new Promise(async (resolve, reject) => {
 			try {
@@ -150,16 +186,20 @@ export class MobileApiV3 {
 
 				resolve(classAverage);
 			} catch (e) {
-				reject((e as AxiosError).response?.data);
+				return reject(new KretaExceptionError((e as AxiosError).response?.data));
 			}
 		});
 	}
 
-	public getClassMaster(Uids: Array<string> | string): Promise<Array<ClassMasterDto>> {
+	/**
+	 * @description Osztályfőnökök lekérése
+	 * @param uids Az osztályfőnök(ök) egyedi azonosítói
+	 */
+	public getClassMaster(uids: string | Array<string>): Promise<Array<ClassMasterDto>> {
 		return new Promise(async (resolve, reject) => {
 			try {
 				const response = await this.instance.get(Endpoints.Mobile.GetClassMaster + qs({
-					Uids: Array.isArray(Uids) ? Uids.join(';') : Uids,
+					Uids: Array.isArray(uids) ? uidFilter(uids) : uids,
 				}));
 
 				const classMasters: Array<ClassMasterDto> = [];
@@ -169,22 +209,29 @@ export class MobileApiV3 {
 
 				resolve(classMasters);
 			} catch (e) {
-				reject((e as AxiosError).response?.data);
+				return reject(new KretaExceptionError((e as AxiosError).response?.data));
 			}
 		});
 	}
 
+	/**
+	 * @description Fogadóóra lekérdezése gondviselők számára
+	 * @param uid A fogadóóra egyedi azonosítója
+	 */
 	public getConsultingHour(uid: string): Promise<ConsultingHourDto> {
 		return new Promise(async (resolve, reject) => {
 			try {
 				const response = await this.instance.get(Endpoints.Mobile.GetConsultingHour(uid));
 				resolve(new ConsultingHourDto(response.data));
 			} catch (e) {
-				reject(e);
+				return reject(new KretaExceptionError((e as AxiosError).response?.data));
 			}
 		});
 	}
 
+	/**
+	 * @description Fogadóórák időpontjainak lekérdezése gondviselők számára
+	 */
 	public getConsultingHours(df?: DateFilter): Promise<Array<ConsultingHourListDto>> {
 		return new Promise(async (resolve, reject) => {
 			try {
@@ -200,22 +247,28 @@ export class MobileApiV3 {
 
 				resolve(consultingHours);
 			} catch (e) {
-				reject(e);
+				return reject(new KretaExceptionError((e as AxiosError).response?.data));
 			}
 		});
 	}
 
+	/**
+	 * @description A gondviselőhöz tartozó tanulónak van-e már kiosztott eszköze
+	 */
 	public getDeviceGivenState(): Promise<boolean> {
 		return new Promise(async (resolve, reject) => {
 			try {
 				const response = await this.instance.get(Endpoints.Mobile.GetDeviceGivenState);
 				return resolve(response.data);
 			} catch (e) {
-				return reject(e);
+				return reject(new KretaExceptionError((e as AxiosError).response?.data));
 			}
 		});
 	}
 
+	/**
+	 * @description Tanuló értékelései
+	 */
 	public getEvaluations(df: DateFilter): Promise<Array<EvaluationDto>> {
 		return new Promise(async (resolve, reject) => {
 			try {
@@ -231,11 +284,69 @@ export class MobileApiV3 {
 
 				resolve(evaluations);
 			} catch (e) {
-				reject(e);
+				return reject(e);
 			}
 		});
 	}
 
+	/**
+	 * @description Tanuló egy értékelése
+	 * @param uid Az értékelés egyedi azonosítója
+	 */
+	public getEvaluation(uid: string): Promise<EvaluationDto> {
+		return new Promise(async (resolve, reject) => {
+			try {
+				const response = await this.instance.get(Endpoints.Mobile.GetEvaluation(uid));
+				resolve(new EvaluationDto(response.data));
+			} catch (e) {
+				return reject(new KretaExceptionError((e as AxiosError).response?.data));
+			}
+		});
+	}
+
+	/**
+	 * @description Tanuló bizonyítvány értékelései
+	 */
+	public getCertificateEvaluations(): Promise<Array<EvaluationDto>> {
+		return new Promise(async (resolve, reject) => {
+			try {
+				const response = await this.instance.get(Endpoints.Mobile.GetCertificateEvaluations);
+
+				const evaluations: Array<EvaluationDto> = [];
+				for (const evaluation of response.data) {
+					evaluations.push(new EvaluationDto(evaluation));
+				}
+
+				resolve(evaluations);
+			} catch (e) {
+				return reject(new KretaExceptionError((e as AxiosError).response?.data));
+			}
+		});
+	}
+
+	/**
+	 * @description Tanuló évközi + egyéb értékelései
+	 */
+	public getNonCertificateEvaluations(): Promise<Array<EvaluationDto>> {
+		return new Promise(async (resolve, reject) => {
+			try {
+				const response = await this.instance.get(Endpoints.Mobile.GetNonCertificateEvaluations);
+
+				const evaluations: Array<EvaluationDto> = [];
+				for (const evaluation of response.data) {
+					evaluations.push(new EvaluationDto(evaluation));
+				}
+
+				resolve(evaluations);
+			} catch (e) {
+				return reject(new KretaExceptionError((e as AxiosError).response?.data));
+			}
+		});
+	}
+
+	/**
+	 * @description Osztályok és csoportok, amikbe a tanuló valaha be volt sorolva az aktuális tanévben
+	 */
 	public getGroups(): Promise<Array<GroupDto>> {
 		return new Promise(async (resolve, reject) => {
 			try {
@@ -248,33 +359,43 @@ export class MobileApiV3 {
 
 				resolve(groups);
 			} catch (e) {
-				reject(e);
+				return reject(new KretaExceptionError((e as AxiosError).response?.data));
 			}
 		});
 	}
 
+	/**
+	 * @description Gondviselő 4T adatainak lekérdezése
+	 */
 	public getGuardian4T(): Promise<Guardian4TDto> {
 		return new Promise(async (resolve, reject) => {
 			try {
 				const response = await this.instance.get(Endpoints.Mobile.GetGuardian4T);
 				return resolve(new Guardian4TDto(response.data));
 			} catch (e) {
-				return reject(e);
+				return reject(new KretaExceptionError((e as AxiosError).response?.data));
 			}
 		});
 	}
 
-	public getHomework(id: string): Promise<HomeworkDto> {
+	/**
+	 * @description Házi feladat entitás lekérdezése
+	 * @param uid A házi feladat egyedi azonosítója
+	 */
+	public getHomework(uid: string): Promise<HomeworkDto> {
 		return new Promise(async (resolve, reject) => {
 			try {
-				const response = await this.instance.get(Endpoints.Mobile.GetHomework(id));
+				const response = await this.instance.get(Endpoints.Mobile.GetHomework(uid));
 				return resolve(new HomeworkDto(response.data));
 			} catch (e) {
-				return reject(e);
+				return reject(new KretaExceptionError((e as AxiosError).response?.data));
 			}
 		});
 	}
 
+	/**
+	 * @description Házi feladatok lekérdezése határidő alapján
+	 */
 	public getHomeworks(df: DateFilter): Promise<Array<HomeworkDto>> {
 		return new Promise(async (resolve, reject) => {
 			try {
@@ -291,11 +412,14 @@ export class MobileApiV3 {
 
 				resolve(homeworks);
 			} catch (e) {
-				return reject(new KretaError((e as AxiosError).response?.data));
+				return reject(new KretaExceptionError((e as AxiosError).response?.data));
 			}
 		});
 	}
 
+	/**
+	 * @description Lázár Ervin Program előadások lekérdezése
+	 */
 	public getLEPEvents(): Promise<Array<LepEventDto>> {
 		return new Promise(async (resolve, reject) => {
 			try {
@@ -308,22 +432,28 @@ export class MobileApiV3 {
 
 				resolve(lepEvents);
 			} catch (e) {
-				reject(e);
+				return reject(new KretaExceptionError((e as AxiosError).response?.data));
 			}
 		});
 	}
 
+	/**
+	 * @description Órarend elem entitás lekérdezése
+	 */
 	public getLesson(orarendElemUid: string): Promise<LessonDto> {
 		return new Promise(async (resolve, reject) => {
 			try {
 				const response = await this.instance.get(Endpoints.Mobile.GetLesson + qs({ orarendElemUid }));
 				return resolve(new LessonDto(response.data));
 			} catch (e) {
-				return reject(e);
+				return reject(new KretaExceptionError((e as AxiosError).response?.data));
 			}
 		});
 	}
 
+	/**
+	 * @description Visszaadja a tanuló órarendi elemeit egy megadott időszakra (tanév rendje eseményeket is)
+	 */
 	public getLessons(df: DateFilter): Promise<Array<LessonDto>> {
 		return new Promise(async (resolve, reject) => {
 			try {
@@ -340,11 +470,14 @@ export class MobileApiV3 {
 
 				resolve(lessons);
 			} catch (e) {
-				return reject((e as AxiosError).response?.data);
+				return reject(new KretaExceptionError((e as AxiosError).response?.data));
 			}
 		});
 	}
 
+	/**
+	 * @description Tanuló tanítási órán tanár által generált feljegyzései
+	 */
 	public getNotes(df: DateFilter): Promise<Array<NoteDto>> {
 		return new Promise(async (resolve, reject) => {
 			try {
@@ -360,11 +493,29 @@ export class MobileApiV3 {
 
 				resolve(notes);
 			} catch (e) {
-				return reject((e as AxiosError).response?.data);
+				return reject(new KretaExceptionError((e as AxiosError).response?.data));
 			}
 		});
 	}
 
+	/**
+	 * @description Tanuló tanítási órán tanár által generált feljegyzése
+	 * @param uid A feljegyzés egyedi azonosítója
+	 */
+	public getNote(uid: string): Promise<NoteDto> {
+		return new Promise(async (resolve, reject) => {
+			try {
+				const response = await this.instance.get(Endpoints.Mobile.GetNote(uid));
+				resolve(new NoteDto(response.data));
+			} catch (e) {
+				return reject(new KretaExceptionError((e as AxiosError).response?.data));
+			}
+		});
+	}
+
+	/**
+	 * @description Tanuló számára megjelenő admin és tanár által rögzített faliújság elemek
+	 */
 	public getNoticeBoardItems(): Promise<Array<NoticeBoardItemDto>> {
 		return new Promise(async (resolve, reject) => {
 			try {
@@ -382,6 +533,9 @@ export class MobileApiV3 {
 		});
 	}
 
+	/**
+	 * @description Tanuló mulasztásai
+	 */
 	public getOmissions(df?: DateFilter): Promise<Array<OmissionDto>> {
 		return new Promise(async (resolve, reject) => {
 			try {
@@ -397,22 +551,43 @@ export class MobileApiV3 {
 
 				resolve(omissions);
 			} catch (e) {
-				reject(e);
+				return reject(new KretaExceptionError((e as AxiosError).response?.data));
 			}
 		});
 	}
 
+	/**
+	 * @description Tanuló mulasztás entitás lekérdezése
+	 * @param uid A mulasztás egyedi azonosítója
+	 */
+	public getOmission(uid: string): Promise<OmissionDto> {
+		return new Promise(async (resolve, reject) => {
+			try {
+				const response = await this.instance.get(Endpoints.Mobile.GetOmission(uid));
+				resolve(new OmissionDto(response.data));
+			} catch (e) {
+				return reject(new KretaExceptionError((e as AxiosError).response?.data));
+			}
+		});
+	}
+
+	/**
+	 * @description Gondviselő regisztrált-e már
+	 */
 	public getRegistrationState(): Promise<any> {
 		return new Promise(async (resolve, reject) => {
 			try {
 				const response = await this.instance.get(Endpoints.Mobile.GetRegistrationState);
 				resolve(response.data);
 			} catch (e) {
-				reject(e);
+				return reject(new KretaExceptionError((e as AxiosError).response?.data));
 			}
 		});
 	}
 
+	/**
+	 * @description Tanulóra vonatkozó tanév rendje elemek
+	 */
 	public getSchoolYearCalendar(): Promise<Array<SchoolYearCalendarEntryDto>> {
 		return new Promise(async (resolve, reject) => {
 			try {
@@ -425,22 +600,29 @@ export class MobileApiV3 {
 
 				resolve(calendarItems);
 			} catch (e) {
-				reject(e);
+				return reject(new KretaExceptionError((e as AxiosError).response?.data));
 			}
 		});
 	}
 
+	/**
+	 * @description Tanulóval, gondviselőivel és intézményével kapcsolatos információk és elérhetőségek
+	 */
 	public getStudent(): Promise<StudentDto> {
 		return new Promise(async (resolve, reject) => {
 			try {
 				const response = await this.instance.get(Endpoints.Mobile.GetStudent);
 				return resolve(new StudentDto(response.data));
 			} catch (e) {
-				return reject(e);
+				return reject(new KretaExceptionError((e as AxiosError).response?.data));
 			}
 		});
 	}
 
+	/**
+	 * @description Tanuló összes tanult tantárgyának átlaga
+	 * @param oktatasiNevelesiFeladatUid Az oktatási-nevelési feladat egyedi azonosítója
+	 */
 	public getSubjectAverage(oktatasiNevelesiFeladatUid: string): Promise<Array<SubjectAverageDto>> {
 		return new Promise(async (resolve, reject) => {
 			try {
@@ -455,10 +637,9 @@ export class MobileApiV3 {
 
 				resolve(subjectAverages);
 			} catch (e) {
-				reject((e as AxiosError).response?.data);
+				return reject(new KretaExceptionError((e as AxiosError).response?.data));
 			}
 		});
-
 	}
 
 	public getTeszekRegistration(): Promise<TeszekRegistrationDto> {
@@ -467,11 +648,14 @@ export class MobileApiV3 {
 				const response = await this.instance.get(Endpoints.Mobile.GetTeszekRegistration);
 				resolve(new TeszekRegistrationDto(response.data));
 			} catch (e) {
-				reject(e);
+				return reject(new KretaExceptionError((e as AxiosError).response?.data));
 			}
 		});
 	}
 
+	/**
+	 * @description Órarendhez tartozó hetirendi elemek
+	 */
 	public getTimeTableWeeks(df: TimeTableDateFilter): Promise<Array<TimeTableWeekDto>> {
 		return new Promise(async (resolve, reject) => {
 			try {
@@ -487,93 +671,159 @@ export class MobileApiV3 {
 
 				resolve(timeTableWeeks);
 			} catch (e) {
-				reject((e as AxiosError).response?.data);
+				return reject(new KretaExceptionError((e as AxiosError).response?.data));
 			}
 		});
 	}
 
+	/**
+	 * @description Saját intézmény adatai
+	 */
+	public getInstitution(): Promise<InstitutionDto> {
+		return new Promise(async (resolve, reject) => {
+			try {
+				const response = await this.instance.get(Endpoints.Mobile.GetInstitution);
+				resolve(new InstitutionDto(response.data));
+			} catch (e) {
+				return reject(new KretaExceptionError((e as AxiosError).response?.data));
+			}
+		});
+	}
+
+	/**
+	 * @description Napi értesítés összefoglaló lekérdezése
+	 */
+	public getDailyNotificationSummary(): Promise<DailyNotificationSummaryDto> {
+		return new Promise(async (resolve, reject) => {
+			try {
+				const response = await this.instance.get(Endpoints.Mobile.GetDailyNotificationSummary);
+				resolve(new DailyNotificationSummaryDto(response.data));
+			} catch (e) {
+				return reject(new KretaExceptionError((e as AxiosError).response?.data));
+			}
+		});
+	}
+
+	/**
+	 * @description A gondviselő "Törvényes képviselő" tulajdonságának lekérdezése
+	 */
+	public getGuardianIsLegalRepresentative(): Promise<boolean> {
+		return new Promise(async (resolve, reject) => {
+			try {
+				const response = await this.instance.get(Endpoints.Mobile.GetGuardianIsLegalRepresentative);
+				resolve(response.data);
+			} catch (e) {
+				return reject(new KretaExceptionError((e as AxiosError).response?.data));
+			}
+		});
+	}
+
+	/**
+	 * @description Bankszámlaszám rögzítése a tanulóhoz
+	 */
 	public postBankAccountNumber(body: BankAccountNumberPostFields): Promise<any> {
 		return new Promise(async (resolve, reject) => {
 			try {
 				const response = await this.instance.post(Endpoints.Mobile.PostBankAccountNumber, new BankAccountNumberPostDto(body).json);
 				resolve(response.data);
 			} catch (e) {
-				reject(e);
+				return reject(new KretaExceptionError((e as AxiosError).response?.data));
 			}
 		});
 	}
 
+	/**
+	 * @description Elérhetőség rögzítése tanulóhoz vagy gondviselőhöz
+	 * @param email Email cím
+	 * @param phoneNumber Telefonszám
+	 */
 	public postContact(email: string, phoneNumber: string): Promise<any> {
 		return new Promise(async (resolve, reject) => {
 			try {
 				const response = await this.instance.post(Endpoints.Mobile.PostContact, qs({ email, telefonszam: phoneNumber }));
 				resolve(response.data);
 			} catch (e) {
-				reject(e);
+				return reject(new KretaExceptionError((e as AxiosError).response?.data));
 			}
 		});
 	}
 
-	public postCovidForm(): Promise<any> {
+	/**
+	 * @description Covid fertőzöttség bejelentése
+	 */
+	public postCovidReport(): Promise<any> {
 		return new Promise(async (resolve, reject) => {
 			try {
-				const response = await this.instance.post(Endpoints.Mobile.PostCovidForm);
+				const response = await this.instance.post(Endpoints.Mobile.PostCovidReport);
 				resolve(response.data);
 			} catch (e) {
-				reject(e);
+				return reject(new KretaExceptionError((e as AxiosError).response?.data));
 			}
 		});
 	}
 
+	/**
+	 * @description Gondviselő fogadóóra-időpont jelentkezés
+	 * @param uid A fogadóóra egyedi azonosítója
+	 */
 	public postReservation(uid: string): Promise<any> {
 		return new Promise(async (resolve, reject) => {
 			try {
 				const response = await this.instance.post(Endpoints.Mobile.PostReservation(uid));
 				resolve(response.data);
 			} catch (e) {
-				reject(e);
+				return reject(new KretaExceptionError((e as AxiosError).response?.data));
 			}
 		});
 	}
 
+	/**
+	 * @description Gondviselő eszköz igényléshez szükséges adatainak elküldése
+	 */
 	public postTeszekRegistration(body: Guardian4TPostFields): Promise<any> {
 		return new Promise(async (resolve, reject) => {
 			try {
 				const response = await this.instance.post(Endpoints.Mobile.PostTeszekRegistration, new Guardian4TPostDto(body).json);
 				resolve(response.data);
 			} catch (e) {
-				reject(e);
+				return reject(new KretaExceptionError((e as AxiosError).response?.data));
 			}
 		});
 	}
 
+	/**
+	 * @description Gondviselő 4T adatainak módosítása
+	 */
 	public updateGuardian4T(body: Guardian4TPostFields): Promise<any> {
 		return new Promise(async (resolve, reject) => {
 			try {
 				const response = await this.instance.put(Endpoints.Mobile.UpdateGuardian4T, new Guardian4TPostDto(body).json);
 				resolve(response.data);
 			} catch (e) {
-				reject(e);
+				return reject(new KretaExceptionError((e as AxiosError).response?.data));
 			}
 		});
 	}
 
+	/**
+	 * @description Lázár Ervin Program előadás engedélyezése, elutasítása vagy függőbe tétele
+	 */
 	public updateLepEventPermission(body: LepEventGuardianPermissionPostFields): Promise<any> {
 		return new Promise(async (resolve, reject) => {
 			try {
 				const response = await this.instance.post(Endpoints.Mobile.UpdateLepEventPermission, new LepEventGuardianPermissionPostDto(body).json);
 				resolve(response.data);
 			} catch (e) {
-				reject(e);
+				return reject(new KretaExceptionError((e as AxiosError).response?.data));
 			}
 		});
 	}
 
-	public get _access_token() {
-		return this.access_token;
+	public get access_token() {
+		return this._access_token;
 	}
 
-	public get _instituteCode() {
-		return this.instituteCode;
+	public get instituteCode() {
+		return this._instituteCode;
 	}
 }

@@ -75,7 +75,7 @@ export default class HomeworkDto implements Partial<HomeworkFields> {
 
 	constructor(input: any) {
 		if (typeof input === 'object' && input !== null) {
-			this.subjectName = typeof input['TantargyNeve'] === 'string' ? input['TantargyNeve'] : undefined;
+			this.subjectName = typeof input['TantargyNeve'] === 'string' ? input['TantargyNeve'].trim() : undefined;
 			this.attachmentList = typeof input['Csatolmanyok'] === 'object' ? input['Csatolmanyok'].map((e: any) => new AttachmentDto(e)) :
 				undefined;
 			this.createDate = typeof input['RogzitesIdopontja'] === 'string' ? new Date(input['RogzitesIdopontja']) : undefined;
