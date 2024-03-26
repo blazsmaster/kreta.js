@@ -1,10 +1,25 @@
 import { IsNumber, IsOptional, IsString, validateSync, ValidationError } from 'class-validator';
 
 export interface AuthenticationFields {
+	/**
+	 * @description Hozzáférési token
+	 */
 	access_token: string;
+	/**
+	 * @description Token lejárati ideje másodpercben
+	 */
 	expires_in: number;
+	/**
+	 * @description Azonosító token
+	 */
 	id_token?: string;
+	/**
+	 * @description Frissítő token
+	 */
 	refresh_token: string;
+	/**
+	 * @description Token típusa
+	 */
 	token_type: string;
 }
 
@@ -40,22 +55,37 @@ export default class AuthenticationDto implements Partial<AuthenticationFields> 
 		}
 	}
 
+	/**
+	 * @description Hozzáférési token
+	 */
 	public get access_token(): string | undefined {
 		return this.accessToken;
 	}
 
+	/**
+	 * @description Token lejárati ideje másodpercben
+	 */
 	public get expires_in(): number | undefined {
 		return this.expiresIn;
 	}
 
+	/**
+	 * @description Azonosító token
+	 */
 	public get id_token(): string | undefined {
 		return this.idToken;
 	}
 
+	/**
+	 * @description Frissítő token
+	 */
 	public get refresh_token(): string | undefined {
 		return this.refreshToken;
 	}
 
+	/**
+	 * @description Token típusa
+	 */
 	public get token_type(): string | undefined {
 		return this.tokenType;
 	}
