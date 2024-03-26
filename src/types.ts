@@ -1,37 +1,23 @@
-// Lib
-export { type MobileApiV3Fields, type DateFilter, type TimeTableDateFilter } from './lib/MobileApiV3';
+import { AttachmentFields } from './models/MobileApi/Homework/AttachmentDto';
 
-// IDP models
+export { type MobileApiV3Fields } from './lib/MobileApiV3';
 export { type AuthenticationFields } from './models/IDP/AuthenticationDto';
 export { type ExtendTokenFields } from './models/IDP/ExtendToken';
 export { type LoginRequestFields } from './models/IDP/LoginRequest';
 export { type NonceRequestFields } from './models/IDP/NonceRequest';
 export { type RevokeRefreshTokenFields } from './models/IDP/RevokeRefreshToken';
-
-// MobileApi models
-// ClassMaster
 export { type EmailFields } from './models/MobileApi/ClassMaster/EmailDto';
 export { type EmployeeFields } from './models/MobileApi/ClassMaster/EmployeeDto';
 export { type PhoneFields } from './models/MobileApi/ClassMaster/PhoneDto';
 export { type TeacherFields } from './models/MobileApi/ClassMaster/TeacherDto';
-// Group
 export { type MembershipFields } from './models/MobileApi/Group/MembershipDto';
-// Homework
-import { AttachmentFields } from './models/MobileApi/Homework/AttachmentDto';
-
 export { type AttachmentFields };
-// Institution
 export { type CustomizationSettingsFields } from './models/MobileApi/Institution/CustomizationSettingsDto';
 export { type SystemModuleFields } from './models/MobileApi/Institution/SystemModuleDto';
-// Lesson
 export type LessonAttachmentFields = Omit<AttachmentFields, 'Tipus'>
-// Omission
 export { type LessonFields as OmissionLessonFields } from './models/MobileApi/Omission/LessonDto';
-// Student
 export { type BankAccountFields } from './models/MobileApi/Student/BankAccountDto';
-// SubjectAverage
 export { type AverageWithTimeFields } from './models/MobileApi/SubjectAverage/AverageWithTimeDto';
-
 export { type AnnouncedTestFields } from './models/MobileApi/AnnouncedTestDto';
 export { type BankAccountNumberPostFields } from './models/MobileApi/BankAccountNumberPostDto';
 export { type ClassAverageFields } from './models/MobileApi/ClassAverageDto';
@@ -62,3 +48,26 @@ export { type TimeTableWeekFields } from './models/MobileApi/TimeTableWeekDto';
 export { type UidNameStructureFields } from './models/MobileApi/UidNameStructure';
 export { type UidStructureFields } from './models/MobileApi/UidStructure';
 export { type ValueDescriptorFields } from './models/MobileApi/ValueDescriptor';
+
+export interface DateFilter {
+	/**
+	 * @description Kezdő dátum
+	 */
+	datumTol?: Date | string;
+	/**
+	 * @description Végdátum
+	 */
+	datumIg?: Date | string;
+}
+
+export interface TimeTableDateFilter {
+	/**
+	 * @description Kezdő időpont
+	 */
+	orarendElemKezdoNapDatuma: Date | string;
+	/**
+	 * @description Záró időpont
+	 */
+	orarendElemVegNapDatuma: Date | string;
+}
+
