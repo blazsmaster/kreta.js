@@ -1,9 +1,9 @@
 import { IsOptional, IsString, validateSync, ValidationError } from 'class-validator';
 
 export interface LoginRequestFields {
-	instituteCode?: string;
+	instituteCode: string;
 	password?: string;
-	username?: string;
+	username: string;
 }
 
 export default class LoginRequest implements Partial<LoginRequestFields> {

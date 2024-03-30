@@ -1,34 +1,22 @@
-import { IsArray, IsInstance, IsOptional, IsString, validateSync, ValidationError } from 'class-validator';
-import KretaErrorItem from './KretaErrorItem';
+import { IsOptional, IsString, validateSync, ValidationError } from 'class-validator';
 
 export interface KretaErrorFields {
-	ExceptionId: string;
-	ExceptionType: string;
-	Message: string;
-	ErrorList: Array<KretaErrorItem> | null;
+	error: string,
+	error_description?: string
 }
 
 export default class KretaError implements Partial<KretaErrorFields> {
 	@IsString()
-	private readonly exceptionId?: string;
-
-	@IsString()
-	private readonly exceptionType?: string;
-
-	@IsString()
-	private readonly message?: string;
+	private readonly _error?: string;
 
 	@IsOptional()
-	@IsArray()
-	@IsInstance(KretaErrorItem, { each: true })
-	private readonly errorList?: Array<KretaErrorItem>;
+	@IsString()
+	private readonly _error_description?: string;
 
 	constructor(input: any) {
 		if (typeof input === 'object' && input !== null) {
-			this.exceptionId = typeof input['ExceptionId'] === 'string' ? input['ExceptionId'].trim() : undefined;
-			this.exceptionType = typeof input['ExceptionType'] === 'string' ? input['ExceptionType'].trim() : undefined;
-			this.message = typeof input['Message'] === 'string' ? input['Message'].trim() : undefined;
-			this.errorList = Array.isArray(input['ErrorList']) ? input['ErrorList'].map((item: any) => new KretaErrorItem(item)) : undefined;
+			this._error = typeof input['error'] === 'string' ? input['error'].trim() : undefined;
+			this._error_description = typeof input['error_description'] === 'string' ? input['error_description'].trim() : undefined;
 		}
 
 		const errors = validateSync(this, { skipMissingProperties: true });
@@ -37,37 +25,25 @@ export default class KretaError implements Partial<KretaErrorFields> {
 		}
 	}
 
-	public get ExceptionId(): string | undefined {
-		return this.exceptionId;
+	public get error(): string | undefined {
+		return this._error;
 	}
 
-	public get ExceptionType(): string | undefined {
-		return this.exceptionType;
-	}
-
-	public get Message(): string | undefined {
-		return this.message;
-	}
-
-	public get ErrorList(): Array<KretaErrorItem> | null | undefined {
-		return this.errorList;
+	public get error_description(): string | undefined {
+		return this._error_description;
 	}
 
 	public get json(): KretaErrorFields {
 		return {
-			ErrorList: this.errorList?.map((item) => item.json),
-			ExceptionId: this.exceptionId,
-			ExceptionType: this.exceptionType,
-			Message: this.message,
+			error: this._error,
+			error_description: this._error_description,
 		} as KretaErrorFields;
 	}
 
 	private validationErrorResponse(errors: Array<ValidationError>): object {
 		const validFields: Partial<KretaErrorFields> = {
-			ExceptionId: this.exceptionId,
-			ExceptionType: this.exceptionType,
-			Message: this.message,
-			ErrorList: this.errorList,
+			error: this._error,
+			error_description: this._error_description,
 		};
 		const errorMessages: Array<string> = [];
 

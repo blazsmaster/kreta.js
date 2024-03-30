@@ -1,12 +1,12 @@
 import { IsNumber, IsOptional, IsString, validateSync, ValidationError } from 'class-validator';
 
-export interface FieldsStudentEvaluationLast {
+export interface StudentEvaluationLastFields {
 	OsztalyzatTipus?: number;
 	Szazalek?: number;
 	Szoveg?: string;
 }
 
-export default class StudentEvaluationLastDto implements Partial<FieldsStudentEvaluationLast> {
+export default class StudentEvaluationLastDto implements Partial<StudentEvaluationLastFields> {
 	@IsOptional()
 	@IsNumber()
 	private readonly evaluationMarkId?: number;
@@ -44,16 +44,16 @@ export default class StudentEvaluationLastDto implements Partial<FieldsStudentEv
 		return this.text;
 	}
 
-	public get json(): FieldsStudentEvaluationLast {
+	public get json(): StudentEvaluationLastFields {
 		return {
 			OsztalyzatTipus: this.evaluationMarkId,
 			Szazalek: this.percentage,
 			Szoveg: this.text,
-		} as FieldsStudentEvaluationLast;
+		} as StudentEvaluationLastFields;
 	}
 
 	private validationErrorResponse(errors: Array<ValidationError>): object {
-		const validFields: Partial<FieldsStudentEvaluationLast> = {
+		const validFields: Partial<StudentEvaluationLastFields> = {
 			OsztalyzatTipus: this.evaluationMarkId,
 			Szazalek: this.percentage,
 			Szoveg: this.text,
@@ -61,7 +61,7 @@ export default class StudentEvaluationLastDto implements Partial<FieldsStudentEv
 		const errorMessages: Array<string> = [];
 
 		for (const error of errors) {
-			validFields[error.property as keyof FieldsStudentEvaluationLast] = undefined;
+			validFields[error.property as keyof StudentEvaluationLastFields] = undefined;
 			errorMessages.push(...Object.values(error.constraints || {}));
 		}
 

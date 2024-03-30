@@ -1,12 +1,12 @@
 import { IsString, validateSync, ValidationError } from 'class-validator';
 
-export interface KretaErrorItemFields {
+export interface KretaExceptionErrorItemFields {
 	PropertyName: string;
 	Message: string;
 	ExceptionType: string;
 }
 
-export default class KretaErrorItem implements Partial<KretaErrorItemFields> {
+export default class KretaExceptionErrorItem implements Partial<KretaExceptionErrorItemFields> {
 	@IsString()
 	private readonly propertyName?: string;
 
@@ -41,16 +41,16 @@ export default class KretaErrorItem implements Partial<KretaErrorItemFields> {
 		return this.exceptionType;
 	}
 
-	public get json(): KretaErrorItemFields {
+	public get json(): KretaExceptionErrorItemFields {
 		return {
 			ExceptionType: this.exceptionType,
 			Message: this.message,
 			PropertyName: this.propertyName,
-		} as KretaErrorItemFields;
+		} as KretaExceptionErrorItemFields;
 	}
 
 	private validationErrorResponse(errors: Array<ValidationError>): object {
-		const validFields: Partial<KretaErrorItemFields> = {
+		const validFields: Partial<KretaExceptionErrorItemFields> = {
 			PropertyName: this.propertyName,
 			Message: this.message,
 			ExceptionType: this.exceptionType,
@@ -58,7 +58,7 @@ export default class KretaErrorItem implements Partial<KretaErrorItemFields> {
 		const errorMessages: Array<string> = [];
 
 		for (const error of errors) {
-			validFields[error.property as keyof KretaErrorItemFields] = undefined;
+			validFields[error.property as keyof KretaExceptionErrorItemFields] = undefined;
 			errorMessages.push(...Object.values(error.constraints || {}));
 		}
 
