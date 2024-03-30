@@ -1,7 +1,3 @@
-enum DktEndpoints {
-	GetClassworkTeachingMaterial = 'mobil/intezmenyek/tanulok/orak/tananyagok',
-}
-
 enum EugyintezesEndpoints {
 	CreateAttachment = 'ideiglenesfajlok',
 	CreateTmgiCase = 'ugy/kerelmek',
@@ -114,29 +110,6 @@ enum NotificationEndpoints {
 }
 
 export const Endpoints = {
-	Dkt: {
-		DeleteHomeworkSolutionAttachment: (haziFeladatBeadasId: string, id: string) => `mobil/intezmenyek/tanulok/orak/hazifeladatok/beadasok/${haziFeladatBeadasId}/fajlok/${id}`,
-		DeleteSolutionAttachment: (oraiFeladatBeadasId: string, id: string) => `mobil/intezmenyek/tanulok/orak/oraifeladatok/beadasok/${oraiFeladatBeadasId}/fajlok/${id}`,
-		GetClasswork: (oraiFeladatId: string) => `mobil/intezmenyek/tanulok/orak/oraifeladatok/${oraiFeladatId}`,
-		GetClassworkAttachmentUrl: (oraiFeladatId: string, id: string) => `mobil/intezmenyek/tanulok/orak/oraifeladatok/${oraiFeladatId}/fajlok/${id}/url`,
-		GetClassworkAttachments: (id: string) => `mobil/intezmenyek/tanulok/orak/oraifeladatok/${id}/fajlok`,
-		GetClassworkGroups: (groupId: string) => `mobil/intezmenyek/tanulok/orak/oraifeladatok/groupok/${groupId}`,
-		GetClassworkSolutionAttachmentUrl: (oraiFeladatBeadasId: string, id: string) => `mobil/intezmenyek/tanulok/orak/oraifeladatok/beadasok/${oraiFeladatBeadasId}/fajlok/${id}/url`,
-		GetHomeworkSolutionAttachmentUrl: (haziFeladatBeadasId: string, id: string) => `mobil/intezmenyek/tanulok/orak/hazifeladatok/beadasok/${haziFeladatBeadasId}/fajlok/${id}/url`,
-		GetHomeworkSolutionAttachments: (haziFeladatBeadasId: string) => `mobil/intezmenyek/tanulok/orak/hazifeladatok/beadasok/${haziFeladatBeadasId}/fajlok`,
-		GetLanguageTask: (groupId: string) => `mobil/intezmenyek/tanulok/orak/nyelvifeladatok/${groupId}`,
-		GetLanguageTaskSubmission: (groupId: string) => `mobil/intezmenyek/tanulok/orak/nyelvifeladatok/groupok/${groupId}/beadas`,
-		GetSolutionAttachments: (beadasId: string) => `mobil/intezmenyek/tanulok/orak/oraifeladatok/beadasok/${beadasId}/fajlok`,
-		GetSubmittedClasswork: (oraiFeladatId: string) => `mobil/intezmenyek/tanulok/orak/oraifeladatok/${oraiFeladatId}/beadas`,
-		GetSubmittedHomework: (haziFeladatId: string) => `mobil/intezmenyek/tanulok/orak/hazifeladatok/${haziFeladatId}/beadas`,
-		PutSaveSolution: (beadasId: string) => `mobil/intezmenyek/tanulok/orak/oraifeladatok/beadasok/${beadasId}`,
-		SaveHomeworkAttachment: (haziFeladatBeadasId: string) => `mobil/intezmenyek/tanulok/orak/hazifeladatok/beadasok/${haziFeladatBeadasId}/fajlok/veglegesites`,
-		SaveHomeworkSolution: (haziFeladatId: string) => `mobil/intezmenyek/tanulok/orak/hazifeladatok/beadasok/${haziFeladatId}`,
-		SaveSolutionAttachment: (oraiFeladatBeadasId: string) => `mobil/intezmenyek/tanulok/orak/oraifeladatok/beadasok/${oraiFeladatBeadasId}/fajlok/veglegesites`,
-		SubmitClassworkSolution: (beadasId: string) => `mobil/intezmenyek/tanulok/orak/oraifeladatok/beadasok/${beadasId}/beadas`,
-		SubmitHomeworkSolution: (haziFeladatId: string) => `mobil/intezmenyek/tanulok/orak/hazifeladatok/beadasok/${haziFeladatId}/beadas`,
-		...DktEndpoints,
-	},
 	Eugyintezes: {
 		CreateRectification: (ugyId: string) => `ugy/kerelmek/${ugyId}`,
 		GetAddressableGuardiansForClass: (osztalyKretaAzonosito: string | number) => `kreta/gondviselok/osztaly/${osztalyKretaAzonosito}`,
@@ -160,25 +133,20 @@ export const Endpoints = {
 		...MobileEndpoints,
 	},
 	Naplo: {
-		DeleteAnnouncedTest: (uid: number) => `Orarend/BejelentettSzamonkeres/${uid}`,
-		DeleteEvaluation: (uid: number) => `OsztalyCsoport/Tanulok/Ertekeles/${uid}`,
-		DeleteHomework: (uid: string) => `HaziFeladat/${uid}`,
-		DeleteHomeworkAttachment: (uid: string) => `HaziFeladat/Csatolmany/${uid}`,
+		DeleteAnnouncedTest: (uid: number | string) => `Orarend/BejelentettSzamonkeres/${uid}`,
+		DeleteEvaluation: (uid: number | string) => `OsztalyCsoport/Tanulok/Ertekeles/${uid}`,
+		DeleteHomework: (uid: number | string) => `HaziFeladat/${uid}`,
+		DeleteHomeworkAttachment: (uid: number | string) => `HaziFeladat/Csatolmany/${uid}`,
 		DeleteJustification: (uid: string) => `Igazolas/${uid}`,
-		GetAnnouncedTest: (uid: number) => `Orarend/BejelentettSzamonkeres/${uid}`,
-		GetHomework: (uid: string) => `HaziFeladat/${uid}`,
-		GetStudent: (uid: number) => `OsztalyCsoport/Tanulok/${uid}`,
-		PutHomework: (uid: string) => `HaziFeladat/${uid}`,
-		UpdateEvaluation: (uid: number) => `OsztalyCsoport/Tanulok/Ertekeles/${uid}`,
+		GetAnnouncedTest: (uid: number | string) => `Orarend/BejelentettSzamonkeres/${uid}`,
+		GetHomework: (uid: number | string) => `HaziFeladat/${uid}`,
+		GetStudent: (uid: number | string) => `OsztalyCsoport/Tanulok/${uid}`,
+		PutHomework: (uid: number | string) => `HaziFeladat/${uid}`,
+		UpdateEvaluation: (uid: number | string) => `OsztalyCsoport/Tanulok/Ertekeles/${uid}`,
 		...NaploEndpoints,
 	},
 	Notification: NotificationEndpoints,
-};
-
-enum DktApi {
-	Host = 'https://kretadktapi.e-kreta.hu',
-	Path = '/dktapi/',
-}
+} as const;
 
 enum EugyintezesApi {
 	Host = 'https://eugyintezes.e-kreta.hu',
@@ -198,7 +166,6 @@ enum IDPApi {
 
 enum MobileApi {
 	Path = '/ellenorzo/v3/',
-	Key = '21ff6c25-d1da-4a68-a811-c881a6057463',
 }
 
 enum NaploApi {
@@ -216,12 +183,12 @@ export const API = {
 	Global: GlobalApi,
 	IDP: IDPApi,
 	Mobile: {
-		Host: (institute_code: string) => `https://${institute_code}.e-kreta.hu`,
+		Host: (instituteCode: string) => `https://${instituteCode}.e-kreta.hu`,
 		...MobileApi,
 	},
 	Naplo: {
-		Host: (institute_code: string) => `https://${institute_code}.e-kreta.hu`,
+		Host: (instituteCode: string) => `https://${instituteCode}.e-kreta.hu`,
 		...NaploApi,
 	},
 	Notification: NotificationApi,
-};
+} as const;
