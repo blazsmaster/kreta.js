@@ -80,12 +80,12 @@ $ npm run build
 
 ```javascript
 // Import the module (CommonJS)
-const { IdpApiV1, MobileApiV3 } = require('./dist');
+const { IdpApiV1, MobileApiV3 } = require('kreta.js');
 ```
 
 ```javascript
 // Import the module (ES6)
-import { IdpApiV1, MobileApiV3 } from './dist';
+import { IdpApiV1, MobileApiV3 } from 'kreta.js';
 
 // Login with personal credentials
 const idp = new IdpApiV1({
